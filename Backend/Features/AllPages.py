@@ -1,5 +1,5 @@
 import streamlit as st
-from Frontend.MergePages import style1
+from Frontend.F_MergePages import style1
 
 style1()
 # -------------------------------
