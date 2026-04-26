@@ -7,7 +7,8 @@ class Settings:
 
     # LLMs (LLaMa, Mistral)
     GROQ_API_KEY = os.getenv("GROQ_API_KEY") # LLaMa
-    MISTRAL_API_KEY = os.getenv("MISTRAL_API_KEY") # Mistral
+    MISTRAL_API_KEY = os.getenv("MISTRAL_API_KEY") # MISTRAL
+    GEMINI_API_KEY = os.getenv("GEMINI_API_KEY") # GEMINI
 
     # DATABASE (MYSQL, MONGODB)
     MONGO_DB_URL = os.getenv("MONGODB_URL") # MongoDB
