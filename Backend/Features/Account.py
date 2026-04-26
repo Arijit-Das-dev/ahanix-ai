@@ -3,10 +3,10 @@ import os
 from datetime import datetime
 from dotenv import load_dotenv
 from Frontend.F_Account import render_auth_page
-
+from Backend.Config.settings import settings
 # ---------- MONGODB SETUP ----------
-load_dotenv()
-url = os.getenv("MONGODB_URL")
+
+url = settings.MONGO_DB_URL
 
 client = MongoClient(url)
 db = client["Jarvis_auth_db"]

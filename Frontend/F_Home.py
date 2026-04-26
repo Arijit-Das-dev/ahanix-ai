@@ -9,7 +9,7 @@ def render_about_page():
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Ahanix AI - About</title>
+        <title>Jarvis AI - About</title>
         <style>
             @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
             
@@ -472,11 +472,11 @@ def render_about_page():
             <div class="hero">
                 <div class="hero-badge">AI for Developers</div>
                 <h1 class="hero-title">
-                    <span class="gradient-text">Ahanix AI</span><br>
+                    <span class="gradient-text">Jarvis AI</span><br>
                     Your Next-Generation AI Assistant
                 </h1>
                 <p class="hero-description">
-                    Experience the future of artificial intelligence with Ahanix AI - a comprehensive platform 
+                    Experience the future of artificial intelligence with Jarvis AI - a comprehensive platform 
                     that combines voice interaction, intelligent code assistance, and creative image generation 
                     in one seamless interface.
                 </p>
@@ -533,7 +533,7 @@ def render_about_page():
                     <!-- Feature 2 -->
                     <div class="feature-card">
                         <span class="feature-icon">💻</span>
-                        <h3 class="feature-title">Ahanix Editor</h3>
+                        <h3 class="feature-title">Jarvis Editor</h3>
                         <p class="feature-description">
                             Revolutionary code editor with built-in AI compiler and copilot. Write code in any language with instant feedback.
                         </p>
@@ -550,7 +550,7 @@ def render_about_page():
                     <!-- Feature 3 -->
                     <div class="feature-card">
                         <span class="feature-icon">🎨</span>
-                        <h3 class="feature-title">Ahanix Lab</h3>
+                        <h3 class="feature-title">Jarvis Lab</h3>
                         <p class="feature-description">
                             Transform your imagination into stunning visuals with AI-powered image generation from simple text prompts.
                         </p>
@@ -604,7 +604,7 @@ def render_about_page():
             <div class="cta-section">
                 <h2 class="cta-title">Ready to Experience the Future?</h2>
                 <p class="cta-subtitle">
-                    Start your journey with Ahanix AI today and unlock intelligent assistance for all your tasks
+                    Start your journey with Jarvis AI today and unlock intelligent assistance for all your tasks
                 </p>
             </div>
             
@@ -631,7 +631,7 @@ def render_about_page():
             
             <!-- Footer -->
             <div class="footer">
-                <p class="footer-text">© 2025 Ahanix AI | All right reserved.</p>
+                <p class="footer-text">© 2025 Jarvis AI | All right reserved.</p>
             </div>
         </div>
 

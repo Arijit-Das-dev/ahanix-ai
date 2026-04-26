@@ -3,6 +3,7 @@ import Frontend.F_Editor as ui
 from mistralai.client import Mistral
 from DB.EditorDB import save_user_code, save_user_query
 from Backend.Config.settings import settings
+from Backend.Core.Features.LLMservice import llm_service_provider
 import uuid
 import os
 import sys
@@ -57,7 +58,7 @@ else:
             # Initialize client
             with Mistral(api_key=settings.MISTRAL_API_KEY) as mistral:
                 completion_ = mistral.chat.complete(
-                    model="mistral-small-latest",
+                    model = llm_service_provider.MODEL_MISTRAL_1,
                     messages=[
                         {"role": "user", "content": final_prompt1}
                     ],
@@ -90,7 +91,7 @@ else:
             
             with Mistral(api_key=settings.MISTRAL_API_KEY) as mistral:
                 completion_ = mistral.chat.complete(
-                    model="mistral-small-latest",
+                    model = llm_service_provider.MODEL_MISTRAL_2,
                     messages=[
                         {"role": "user", "content": final_prompt2}
                     ],
