@@ -1,24 +1,23 @@
 import os
-from groq import Groq
-from datetime import datetime
 import requests
 import speech_recognition as sr
 import streamlit as st
 import pyaudio
 import warnings
 import random
-from dotenv import load_dotenv
-from Frontend.F_Main import style3_MAIN, animation
-from DB.wake_db import insert_wake
-from DB.weather_db import insert_weather
 import base64
-from DB.MainDB import insert_into_user, insert_into_assistant
 import uuid
 import io
 import edge_tts
 import asyncio
 import time as t
-
+from DB.MainDB import insert_into_user, insert_into_assistant
+from Frontend.F_Main import style3_MAIN, animation
+from Backend.Config.settings import settings
+from DB.wake_db import insert_wake
+from DB.weather_db import insert_weather
+from groq import Groq
+from datetime import datetime
 
 
 # ---------- Session variables (TOP) ----------
@@ -164,8 +163,7 @@ class Jarvis(CoreEngine):
 
     def __init__(self):
 
-        load_dotenv()
-        API_KEY = os.getenv("GROQ_API_KEY")
+        API_KEY = settings.GROQ_API_KEY
         self.client = Groq(api_key=API_KEY)
         self.chat_history = [] # Chat history
 

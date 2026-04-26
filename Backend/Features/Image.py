@@ -58,5 +58,4 @@ else:
                 except Exception as e:
                     st.error(f"Error generating image: {e}")
         else:
-
             st.warning("Please enter the prompt first !")        
