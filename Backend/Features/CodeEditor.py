@@ -1,10 +1,14 @@
 import streamlit as st
 import Frontend.F_Editor as ui 
-from mistralai import Mistral
-from dotenv import load_dotenv
+from mistralai.client import Mistral
 from DB.EditorDB import save_user_code, save_user_query
+from Backend.Config.settings import settings
 import uuid
 import os
+import sys
+
+# Add project root to path
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
 
 st.set_page_config(layout="wide")
 ui.inject_css()
@@ -41,38 +45,21 @@ else:
 
             save_user_code(user_id=userId, user_code=code)
 
-            prompt1 = f'''
-        You are an expert programmer and code debugger. 
-    When given a piece of code, follow these instructions:
+            root_dir = os.path.abspath(
+                        os.path.join(os.path.dirname(__file__), "..", "..")
+                    )
+            prompt_path = os.path.join(root_dir, "Prompt", "codePrompt1.txt")
 
-    1. Detect the programming language automatically.
-    2. Execute a dry-run (simulate code execution mentally).
-    3. If there are errors:
-    - Show heading: **ERROR** (stylish, bold/italic if possible)
-    - Specify the **error message in the style of the language** (Python, Java, C++, etc.)
-    - Mention the **line number** causing the error
-    - Explain **why the error occurred**
-    - Provide **corrected code**
-    - Explain what you changed and why
-    4. If the code is correct:
-    - Show heading: **" CORRECT "** (stylish, bold/italic if possible)
-    - Provide the **output of the code**
-    - Explain what the code does, line by line if necessary
+            with open(prompt_path, "r", encoding="utf-8") as f:
+                prompt1 = f.read()
 
-    Use headings clearly, code blocks for code, and keep explanations concise but informative.
-
-    Here is the user code:        
-    {code}
-    '''
-            # Load environment variables
-            load_dotenv()
-
+            final_prompt1 = f"{prompt1}\nUser: {code}\nAssistant:"
             # Initialize client
-            with Mistral(api_key=os.getenv("MISTRAL_API_KEY", "")) as mistral:
+            with Mistral(api_key=settings.MISTRAL_API_KEY) as mistral:
                 completion_ = mistral.chat.complete(
                     model="mistral-small-latest",
                     messages=[
-                        {"role": "user", "content": prompt1}
+                        {"role": "user", "content": final_prompt1}
                     ],
                     stream=False
                 )
@@ -90,57 +77,22 @@ else:
         if send:
 
             save_user_query(user_id=userId, user_query=user_input)
-
-            prompt2 = f"""
-You are Jarvis, an expert software engineer, debugger, and programming tutor.
-
-You are integrated into a web-based coding platform called "Jarvis Code Editor".
-On the left side of the interface, there is a code editor where the user writes or pastes code.
-On the right side, there is an AI chat panel (you) that assists the user in real time.
-
-The user will paste a code-related problem. This may include:
-- Source code
-- Error messages
-- Logical issues
-- Conceptual doubts
-- Expected vs actual output
-
-Your task:
-
-1. Automatically identify the programming language.
-2. Clearly understand the user's problem in the context of the code editor.
-3. If code or errors are present:
-   - Explain the problem in simple, beginner-friendly terms.
-   - Point out the exact issue (include line numbers when possible).
-   - Provide a corrected or improved solution.
-   - Show the final working code.
-4. If the question is conceptual:
-   - Explain the concept step-by-step.
-   - Use simple examples when helpful.
-5. Simulate execution (dry run) when applicable:
-   - Explain how the code executes.
-   - Why the error occurred.
-   - Why the correction works.
-6. Provide the expected output if applicable.
-7. Encourage learning by explaining the logic, not just giving the answer.
-
-Formatting rules:
-- Use clear headings: PROBLEM, ANALYSIS, SOLUTION, FIXED CODE, OUTPUT, EXPLANATION.
-- Use code blocks for all code.
-- Keep responses clear, concise, and practical.
-- Avoid unnecessary verbosity.
-- Be accurate and supportive, like a personal coding mentor.
-
-here is the user input box message:
-{user_input}
-"""         
-            load_dotenv()
             
-            with Mistral(api_key=os.getenv("MISTRAL_API_KEY", "")) as mistral:
+            root_dir = os.path.abspath(
+                        os.path.join(os.path.dirname(__file__), "..", "..")
+                    )
+            prompt_path = os.path.join(root_dir, "Prompt", "codePrompt2.txt")
+
+            with open(prompt_path, "r", encoding="utf-8") as f:
+                prompt2 = f.read()
+            
+            final_prompt2 = f"{prompt2}\nUser: {user_input}\nAssistant:"
+            
+            with Mistral(api_key=settings.MISTRAL_API_KEY) as mistral:
                 completion_ = mistral.chat.complete(
                     model="mistral-small-latest",
                     messages=[
-                        {"role": "user", "content": prompt2}
+                        {"role": "user", "content": final_prompt2}
                     ],
                     stream=False
                 )

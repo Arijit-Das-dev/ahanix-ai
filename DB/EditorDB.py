@@ -5,18 +5,16 @@ Using MongoDB for storing user codes and user queries
 
 from pymongo import MongoClient
 from datetime import datetime
-from dotenv import load_dotenv
-import os
+from Backend.Config.settings import settings 
 
 def connect_db():
 
-    load_dotenv()
     """
     Connect to MongoDB and return collections
     """
 
     # Build connection with MongoDB Compass
-    client = MongoClient(os.getenv("MONGODB_URL"))
+    client = MongoClient(settings.MONGO_DB_URL)
 
     # Created database in MongoDB Compass
     db = client["Jarvis_Code_Db"]

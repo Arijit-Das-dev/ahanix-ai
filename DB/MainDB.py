@@ -5,14 +5,11 @@ Storing user queries and assistant queries to MongoDB
 """
 from pymongo import MongoClient
 from datetime import datetime
-from dotenv import load_dotenv
-import os
+from Backend.Config.settings import settings
 
 def connect_db():
 
-    load_dotenv()
-
-    client = MongoClient(os.getenv("MONGODB_URL"))
+    client = MongoClient(settings.MONGO_DB_URL)
 
     db = client["Jarvis_main_db"]
 

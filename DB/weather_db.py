@@ -1,12 +1,13 @@
 import mysql.connector
 from datetime import datetime
+from Backend.Config.settings import settings
 
 def connect_db():
     conn = mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="Arijitdas@12",
-        database="weather_db"
+        host = settings.MY_SQL_HOST,
+        user = settings.MY_SQL_USER,
+        password = settings.MY_SQL_PASSWORD,
+        database = settings.MYSQL_JARVIS_WEATHER
     )
     return conn
 
