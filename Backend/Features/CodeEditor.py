@@ -1,9 +1,7 @@
 import streamlit as st
 import Frontend.F_Editor as ui 
-from mistralai.client import Mistral
 from DB.EditorDB import save_user_code, save_user_query
-from Backend.Config.settings import settings
-from Backend.Core.Features.LLMservice import llm_service_provider
+from Backend.Services.modelMistral import modelMistral
 import uuid
 import os
 import sys
@@ -44,32 +42,14 @@ else:
 
         if submit:
 
+            # save user code to DB
             save_user_code(user_id=userId, user_code=code)
 
-            root_dir = os.path.abspath(
-                        os.path.join(os.path.dirname(__file__), "..", "..")
-                    )
-            prompt_path = os.path.join(root_dir, "Prompt", "codePrompt1.txt")
-
-            with open(prompt_path, "r", encoding="utf-8") as f:
-                prompt1 = f.read()
-
-            final_prompt1 = f"{prompt1}\nUser: {code}\nAssistant:"
-            # Initialize client
-            with Mistral(api_key=settings.MISTRAL_API_KEY) as mistral:
-                completion_ = mistral.chat.complete(
-                    model = llm_service_provider.MODEL_MISTRAL_1,
-                    messages=[
-                        {"role": "user", "content": final_prompt1}
-                    ],
-                    stream=False
-                )
-
-            # Extract result
-            result1 = completion_.choices[0].message.content
+            # Extract result from Backend/Services/modelMistral.py
+            result_1 = modelMistral.mistralModel1(code1=code)
 
             # Send to UI
-            ui.output_box(result1)
+            ui.output_box(result_1)
     
     with col_chat:
 
@@ -78,26 +58,7 @@ else:
         if send:
 
             save_user_query(user_id=userId, user_query=user_input)
-            
-            root_dir = os.path.abspath(
-                        os.path.join(os.path.dirname(__file__), "..", "..")
-                    )
-            prompt_path = os.path.join(root_dir, "Prompt", "codePrompt2.txt")
 
-            with open(prompt_path, "r", encoding="utf-8") as f:
-                prompt2 = f.read()
-            
-            final_prompt2 = f"{prompt2}\nUser: {user_input}\nAssistant:"
-            
-            with Mistral(api_key=settings.MISTRAL_API_KEY) as mistral:
-                completion_ = mistral.chat.complete(
-                    model = llm_service_provider.MODEL_MISTRAL_2,
-                    messages=[
-                        {"role": "user", "content": final_prompt2}
-                    ],
-                    stream=False
-                )
-
-            result2 = completion_.choices[0].message.content
+            result2 = modelMistral.mistralModel2(code2=user_input)
             
             ui.output_box(result2)
