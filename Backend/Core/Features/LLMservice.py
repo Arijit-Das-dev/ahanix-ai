@@ -1,7 +1,4 @@
-"""
-lLMs => LLaMa, Mistral, Gemini
-
-"""
+# Storing LLM models => LLaMa, Mistral, Gemini
 
 class LLM_SERVICE_PROVIDER:
 
