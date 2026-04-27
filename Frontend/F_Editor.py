@@ -470,15 +470,96 @@ def output_box(content: str, title: str = "OUTPUT"):
     st.markdown("</div>", unsafe_allow_html=True)
 
 def ai_chat_input():
-    st.markdown("### 🤖 Ask Jarvis")
-    st.info("💬 Paste your code or question here to get instant AI assistance...")
-    user_input = st.text_area(
-        "Paste your problem here",
-        height=160,
-        placeholder="Paste error, question, or problem statement...",
-        label_visibility="collapsed"
-    )
-
-    send = st.button("Send", use_container_width=False)
-
-    return user_input, send
+    # Clear Chat button
+    if st.button("Clear Chat 🗑️", use_container_width=False):
+        st.session_state["chat_messages"] = []
+        st.rerun()
+    
+    # Inject chat CSS
+    st.markdown("""
+    <style>
+    #chat-history-box {
+        max-height: 500px;
+        overflow-y: auto;
+        padding: 10px;
+        background: rgba(10, 10, 25, 0.5);
+        border-radius: 15px;
+        border: 1px solid rgba(147, 51, 234, 0.3);
+    }
+    .user-bubble {
+        background: linear-gradient(135deg, #8b5cf6, #d946ef);
+        color: white;
+        float: right;
+        clear: both;
+        border-radius: 12px 12px 4px 12px;
+        padding: 8px 12px;
+        max-width: 95%;
+        margin: 4px 0;
+        box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
+        font-size: 14px;
+    }
+    .assistant-bubble {
+        background: rgba(30, 20, 60, 0.8);
+        color: #e0d4ff;
+        float: left;
+        clear: both;
+        border-radius: 12px 12px 12px 4px;
+        border: 1px solid rgba(167, 139, 250, 0.3);
+        padding: 8px 12px;
+        max-width: 95%;
+        margin: 4px 0;
+        font-size: 14px;
+    }
+    .message-label {
+        font-size: 10px;
+        margin-bottom: 3px;
+        font-weight: 600;
+    }
+    .user-label {
+        color: #c4b5fd;
+    }
+    .assistant-label {
+        color: #a78bfa;
+    }
+    .clearfix {
+        clear: both;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+    
+    # Chat history container
+    st.markdown('<div id="chat-history-box">', unsafe_allow_html=True)
+    
+    # Render all messages
+    for msg in st.session_state["chat_messages"]:
+        if msg["role"] == "user":
+            st.markdown(f"""
+            <div class="user-bubble">
+                <div class="message-label user-label">You <span style="float:right">{msg["time"]}</span></div>
+                {msg["content"]}
+            </div>
+            <div class="clearfix"></div>
+            """, unsafe_allow_html=True)
+        else:
+            st.markdown(f"""
+            <div class="assistant-bubble">
+                <div class="message-label assistant-label">🤖 Jarvis <span style="float:right">{msg["time"]}</span></div>
+                {msg["content"]}
+            </div>
+            <div class="clearfix"></div>
+            """, unsafe_allow_html=True)
+    
+    st.markdown('</div>', unsafe_allow_html=True)
+    
+    # Auto-scroll
+    st.markdown("""
+    <script>
+    const chatBox = document.getElementById('chat-history-box');
+    if (chatBox) chatBox.scrollTop = chatBox.scrollHeight;
+    </script>
+    """, unsafe_allow_html=True)
+    
+    # Input
+    user_input = st.chat_input("Ask Jarvis...")
+    
+    return user_input

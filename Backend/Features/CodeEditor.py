@@ -5,6 +5,7 @@ from Backend.Services.modelMistral import modelMistral
 import uuid
 import os
 import sys
+from datetime import datetime
 
 # Add project root to path
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
@@ -20,6 +21,9 @@ if "user_id" not in st.session_state:
 if "started" not in st.session_state:
     st.session_state.started = False
 
+if "chat_messages" not in st.session_state:
+    st.session_state["chat_messages"] = []
+
 userId = st.session_state.user_id
 
 # ---------------- Landing Page ----------------
@@ -33,32 +37,43 @@ if not st.session_state.started:
         st.rerun()
 
 else:
-    # Editor + chat layout
-    col_editor, col_chat = st.columns([5, 4])
+    # Chat in existing sidebar
+    with st.sidebar:
+        user_input = ui.ai_chat_input()
+
+        if user_input:
+            with st.spinner("🤖 Jarvis is thinking..."):
+                # Append user message
+                st.session_state["chat_messages"].append({
+                    "role": "user",
+                    "content": user_input,
+                    "time": datetime.now().strftime("%I:%M %p")
+                })
+
+                # Save to DB
+                save_user_query(user_id=userId, user_query=user_input)
+
+                # Call AI
+                result2 = modelMistral.mistralModel2(code2=user_input)
+
+                # Append AI response
+                st.session_state["chat_messages"].append({
+                    "role": "assistant",
+                    "content": result2,
+                    "time": datetime.now().strftime("%I:%M %p")
+                })
+
+            st.rerun()
     
-    with col_editor:
-        
-        code, submit = ui.code_editor()
+    # Main area for editor
+    code, submit = ui.code_editor()
 
-        if submit:
+    if submit:
+        # save user code to DB
+        save_user_code(user_id=userId, user_code=code)
 
-            # save user code to DB
-            save_user_code(user_id=userId, user_code=code)
+        # Extract result from Backend/Services/modelMistral.py
+        result_1 = modelMistral.mistralModel1(code1=code)
 
-            # Extract result from Backend/Services/modelMistral.py
-            result_1 = modelMistral.mistralModel1(code1=code)
-
-            # Send to UI
-            ui.output_box(result_1)
-    
-    with col_chat:
-
-        user_input, send = ui.ai_chat_input()
-
-        if send:
-
-            save_user_query(user_id=userId, user_query=user_input)
-
-            result2 = modelMistral.mistralModel2(code2=user_input)
-            
-            ui.output_box(result2)
+        # Send to UI
+        ui.output_box(result_1)
