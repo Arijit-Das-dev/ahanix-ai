@@ -7,7 +7,7 @@ from mistralai.client.models import SystemMessage, UserMessage, AssistantMessage
 from mistralai.client import Mistral
 
 class MODEL_MISTRAL:
-
+        
     def __init__(self):
         
         # LOADING REQUIREMENTS
