@@ -89,7 +89,6 @@ class Jarvis(CoreEngine):
 
                 self.speak('''Okay sir, i am going to sleep now, if you need anything, just wake me up by saying "hey jarvis" ''')
                 return "exit"
-            
             else:
                 try:
                     root_dir = os.path.abspath(
