@@ -1,12 +1,12 @@
 import time as t
-from Backend.Services.modelLlama import j
+from Backend.Services.modelLlama import Jarvis
 from Backend.Core.Features.greetFunc import greet
 from Frontend.F_Main import style3_MAIN, animation
 from DB.wake_db import insert_wake
 
 style3_MAIN()
 animation()
-
+j = Jarvis()
 if __name__ == "__main__":
     
     greet()
@@ -20,7 +20,7 @@ if __name__ == "__main__":
             insert_wake(wake_word)
 
             
-            j.speak("Yes sir")
+            j.speak("Yes sir, i am listening")
 
             # Run main Jarvis conversation
             query = j.take_command()

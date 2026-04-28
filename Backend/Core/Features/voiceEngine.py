@@ -36,7 +36,7 @@ class CoreEngine:
                 text=text,
                 voice="en-US-GuyNeural",
                 rate="+3%",
-                pitch="+1Hz"
+                pitch="+5Hz"
             )
 
             audio_bytes = b""

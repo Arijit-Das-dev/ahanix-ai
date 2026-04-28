@@ -5,7 +5,7 @@ import uuid
 import streamlit as st
 import warnings
 import requests
-from Backend.Core.Features.coreEngine import CoreEngine
+from Backend.Core.Features.voiceEngine import CoreEngine
 from Backend.Config.settings import settings
 from DB.weather_db import insert_weather
 from DB.MainDB import insert_into_assistant
@@ -110,6 +110,3 @@ class Jarvis(CoreEngine):
 
                     print("LLM Error:", e)
                     self.speak("I did not hear that properly, tell that again")
-
-# Accessing all classes by creating [objects -> CoreEngine -> jarvis]
-j = Jarvis()

@@ -2,8 +2,9 @@
 import requests
 from datetime import datetime
 import time as t
-from Backend.Services.modelLlama import j
+from Backend.Services.modelLlama import Jarvis
 
+j = Jarvis()
 
 def greet():
 
