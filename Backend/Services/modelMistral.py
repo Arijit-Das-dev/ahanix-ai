@@ -1,13 +1,12 @@
-# Setting up Mistral Templete
-
+""" Setting up Model : Mistral """
 import os
 from Backend.Config.settings import settings # API KEY
-from Backend.Core.Features.LLMservice import llm_service_provider # LLM model
+from Backend.Core.Features.llmService import llm_service_provider # LLM model
 from mistralai.client.models import SystemMessage, UserMessage, AssistantMessage
 from mistralai.client import Mistral
 
 class MODEL_MISTRAL:
-        
+
     def __init__(self):
         
         # LOADING REQUIREMENTS
