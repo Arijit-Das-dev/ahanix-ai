@@ -257,7 +257,7 @@ def inject_css():
         background: rgba(167, 139, 250, 0.25);
         border-color: rgba(167, 139, 250, 0.5);
         transform: translateY(-2px);
-    }        
+    }
         
     /* SCROLLBAR */
     ::-webkit-scrollbar {
@@ -413,6 +413,31 @@ def render_promptlab_home():
             <div class="glass-card-mini">
                 🚀 Build better workflows with optimized prompts.
             </div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+def userMsg(user_input):
+
+    st.markdown(f"""
+    <div style="
+        display: flex;
+        justify-content: flex-end;
+        margin: 10px 20px;
+    ">
+        <div style="
+            display: inline-block;
+            max-width: 70%;
+            padding: 12px 16px;
+            border-radius: 16px;
+            background: rgba(99,102,241,0.15);
+            border: 1px solid rgba(99,102,241,0.3);
+            color: white;
+            font-size: 14px;
+            line-height: 1.6;
+            word-wrap: break-word;
+        ">
+            {user_input}
         </div>
     </div>
     """, unsafe_allow_html=True)

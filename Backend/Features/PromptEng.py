@@ -48,13 +48,13 @@ else:
             "msg": user_input
         })
 
-        with st.chat_message("user"):
-            st.markdown(user_input)
+        
+        ui.userMsg(user_input=user_input)
 
-        with st.chat_message("assistant"):
+        with st.chat_message(name="assistant"):
             with st.spinner("Thinking...."):
                 ai_response = modelGemini.askGemini(query=user_input)
-                st.markdown(ai_response)
+                st.info(ai_response)
 
         st.session_state.message.append({
             "role": "assistant",
