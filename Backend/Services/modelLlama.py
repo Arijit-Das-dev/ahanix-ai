@@ -5,7 +5,7 @@ import uuid
 import streamlit as st
 import warnings
 import requests
-from Backend.Core.Features.voiceEngine import CoreEngine
+from Backend.Core.Features.LLmModelCore.voiceEngine import CoreEngine
 from Backend.Config.settings import settings
 from DB.weather_db import insert_weather
 from DB.MainDB import insert_into_assistant
