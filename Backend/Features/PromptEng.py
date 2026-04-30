@@ -1,39 +1,62 @@
 import streamlit as st
+import uuid
 from Backend.Services.modelGemini import modelGemini
+import Frontend.F_PromptEng as ui
 
+ui.inject_css()
 
-st.set_page_config(page_title="Prompt Lab", layout="centered")
+st.set_page_config(
+    page_title="PromptLab",
+)
+
+# ---------- Session variables (TOP) ----------
+if "user_id" not in st.session_state:
+    st.session_state.user_id = str(uuid.uuid4())
+
+# ---------------- Session State ----------------
+if "started" not in st.session_state:
+    st.session_state.started = False
 
 if "message" not in st.session_state:
-    st.session_state.message = []
+    st.session_state.message = []  
 
-user_input = st.chat_input("Ask anything....")  # ← Move this UP
+userId = st.session_state.user_id
 
-# Only show welcome if no messages AND no input is being submitted
-if len(st.session_state.message) == 0 and not user_input:
-    st.markdown("## Prompt Lab")
-    st.markdown("Hi there! How can I help you?")
+if not st.session_state.started:
+    start = ui.landing_section1() # just renders user guide
 
-for i in st.session_state.message:
-    with st.chat_message(i["role"]):
-        st.markdown(i["msg"])
+    # If "Get Started" clicked, update session_state and rerun
+    if start:
+        st.session_state.started = True
+        st.rerun()
 
-if user_input:
+else:
+    user_input = st.chat_input("Describe your prompt....")  # ← Move this UP
 
-    st.session_state.message.append({
-        "role": "user",
-        "msg": user_input
-    })
+    # Only show welcome if no messages AND no input is being submitted
+    if len(st.session_state.message) == 0 and not user_input:
+        ui.render_promptlab_home()
 
-    with st.chat_message("user"):
-        st.markdown(user_input)
+    for i in st.session_state.message:
+        with st.chat_message(i["role"]):
+            st.markdown(i["msg"])
 
-    with st.chat_message("assistant"):
-        with st.spinner("Thinking...."):
-            ai_response = modelGemini.askGemini(query=user_input)
-            st.markdown(ai_response)
+    if user_input:
 
-    st.session_state.message.append({
-        "role": "assistant",
-        "msg": ai_response
-    })
+        st.session_state.message.append({
+            "role": "user",
+            "msg": user_input
+        })
+
+        with st.chat_message("user"):
+            st.markdown(user_input)
+
+        with st.chat_message("assistant"):
+            with st.spinner("Thinking...."):
+                ai_response = modelGemini.askGemini(query=user_input)
+                st.markdown(ai_response)
+
+        st.session_state.message.append({
+            "role": "assistant",
+            "msg": ai_response
+        })
