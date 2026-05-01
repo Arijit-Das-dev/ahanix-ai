@@ -1,7 +1,8 @@
 import streamlit as st
+import Frontend.F_PromptEng as ui
 import uuid
 from Backend.Services.modelGemini import modelGemini
-import Frontend.F_PromptEng as ui
+from DB.PromptEngDB import save_user_query, save_gemini_response
 
 ui.inject_css()
 
@@ -23,7 +24,7 @@ if "message" not in st.session_state:
 userId = st.session_state.user_id
 
 if not st.session_state.started:
-    start = ui.landing_section1() # just renders user guide
+    start = ui.landingSection2() # just renders user guide
 
     # If "Get Started" clicked, update session_state and rerun
     if start:
@@ -48,13 +49,19 @@ else:
             "msg": user_input
         })
 
+        # SAVING TO DB
+        save_user_query(user_id=userId, user_query=user_input)
         
-        ui.userMsg(user_input=user_input)
+        with st.chat_message(name="user"):
+            st.code(user_input)
 
         with st.chat_message(name="assistant"):
             with st.spinner("Thinking...."):
                 ai_response = modelGemini.askGemini(query=user_input)
                 st.info(ai_response)
+
+        # SAVING AI RESPONSE TO DB
+        save_gemini_response(user_id=userId, ai_respose=ai_response)
 
         st.session_state.message.append({
             "role": "assistant",
