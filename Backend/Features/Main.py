@@ -2,7 +2,7 @@ import time as t
 from Backend.Services.modelLlama import Jarvis
 from Backend.Core.Features.LLmModelCore.greetFunc import greet
 from Frontend.F_Main import style3_MAIN, animation
-from DB.wake_db import insert_wake
+from DB.MySQL.wake_db import insert_wake
 
 style3_MAIN()
 animation()

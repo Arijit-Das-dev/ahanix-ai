@@ -2,7 +2,7 @@ import streamlit as st
 import Frontend.F_PromptEng as ui
 import uuid
 from Backend.Services.modelGemini import modelGemini
-from DB.PromptEngDB import save_user_query, save_gemini_response
+from DB.MongoDB.PromptEngDB import save_user_query, save_gemini_response
 
 ui.inject_css()
 
