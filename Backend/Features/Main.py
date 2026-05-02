@@ -3,6 +3,7 @@ from Backend.Services.modelLlama import Jarvis
 from Backend.Core.Features.LLmModelCore.greetFunc import greet
 from Frontend.F_Main import style3_MAIN, animation
 from DB.MySQL.wake_db import insert_wake
+from DB.MongoDB.MainDB import insert_into_user
 
 style3_MAIN()
 animation()
@@ -26,6 +27,7 @@ if __name__ == "__main__":
 
             # Run main Jarvis conversation
             query = j.take_command()
+            insert_into_user(query_user=query)
 
             if query != "none":
                 result = j.JarvisRun(query)
