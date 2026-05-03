@@ -6,6 +6,8 @@ from google import genai
 from google.genai import types
 import os
 
+
+""" SETTING UP GEMINI MODEL """ # TEMPLETE
 class MODEL_GEMINI:
 
     def __init__(self):

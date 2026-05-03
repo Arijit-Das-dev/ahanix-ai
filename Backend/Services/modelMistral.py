@@ -5,6 +5,8 @@ from Backend.Core.Features.LLmModelCore.llmService import llm_service_provider #
 from mistralai.client.models import SystemMessage, UserMessage, AssistantMessage
 from mistralai.client import Mistral
 
+
+""" SETTING UP MISTRAL MODEL """ # TEMPLETE
 class MODEL_MISTRAL:
 
     def __init__(self):
