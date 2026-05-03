@@ -1,0 +1,117 @@
+import os
+from langchain_community.document_loaders import DirectoryLoader, PyPDFLoader
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+from langchain_community.embeddings import HuggingFaceEmbeddings
+from langchain_chroma import Chroma
+
+#SETTING UP INGESTION PIPELINE MODEL
+class INGESTION_PIPELINE_MODEL:
+
+    # ==============================================
+    # LOADING ALL FOLDERS TO THE LANGCHAIN DIRECTORY
+    # ==============================================
+    def load_all_docs(self, file_path: str):
+        
+        # checking if that folder path exists
+        if not os.path.exists(file_path):
+            raise FileNotFoundError(f"{file_path} Not found")
+        
+        # load all folders + files to the Langchain Directory
+        loader = DirectoryLoader(
+            path=file_path,
+            glob="*.pdf",
+            loader_cls=PyPDFLoader         
+        )
+
+        # load all docs [FOLDERS in cwd] 
+        documents = loader.load()
+
+        # checking if any files exists inside that folder
+        if not documents:
+            raise ValueError("No pdf found in that Folder")
+        
+        # inserting the basic info with the documents into the files
+        for files in documents:
+            source = files.metadata.get("source", "")
+            files.metadata["file_name"] = os.path.basename(source)
+        
+        # Printing all the files inside that document
+        for i, files in enumerate(documents, 1):
+            print(f"File number : {i}")
+            print(f"SOURCE FILE : {source}")
+            print(f"FILE NAME : {files.metadata["file_name"]}")
+
+        """ LOADED SUCCESSFULLY """
+        print(f"{file_path} LOADED SUCCESSFULLY")
+        print("="*50)
+        print("="*50)
+        print()
+
+        return documents
+    
+    # ======================
+    # CLEANING THE DOCUMENTS
+    # =======================
+    def clean_docs(documents):
+
+        for files in documents:
+            text = files.page_content
+
+            text = text.replace("\n", " ") 
+            text = " ".join(text.split()) # removes extra space
+
+            files.page_dontent = text.strip()
+
+        print("DOCUMENTs CLEANED SUCCESSFULLY")
+        print("="*50)
+        return documents
+    
+    # =================
+    # SPLIT INTO CHUNKS
+    # =================
+    def text_to_chunks(self, documents):
+
+        print("\n SPLITTING PDFs INTO CHUNKS")
+
+        splitter = RecursiveCharacterTextSplitter(
+            chunk_size = 800,
+            chunk_overlap = 150,
+        )
+
+        chunks = splitter.split_documents(documents)
+
+        for i, chunk in enumerate(chunks):
+
+            chunk.metadata["chunk_id"] = i
+            chunk.metadata["length"] = len(chunk.page_content)
+
+        for i, chunk in enumerate(chunks[:6]):
+            print("="*60)
+            print(f"CHUNK ID : {chunk.metadata["chunk_id"]}")
+            print(f"CHUNK LENGTH : {chunk.metadata["length"]}")
+            print(f"CHUNK SOURCE : {chunk.metadata.get("source")}")
+            print(f"CHUNK PAGE CONTENT : {chunk.page_content}")
+
+        print(f"TOTAL CHUNKS CREATED : {len(chunks)}")
+        return chunks
+    
+    # ======================
+    # CREATE VECTOR DATABASE
+    # ======================
+    def create_vector_db(self, chunks, db_path="DB/ChromaDB"):
+
+        embeddings = HuggingFaceEmbeddings(
+            model_name = "sentence-transformers/all-MiniLM-L6-v2"
+        )
+
+        vector_store = Chroma.from_documents(
+        documents=chunks,
+        embedding=embeddings,
+        persist_directory=db_path,
+        collection_metadata={"hnsw:space": "cosine"}
+        )
+
+        vector_store.persist()
+
+        print("CHROMA DB CREATED SUCCESSFULLY")
+        return vector_store
