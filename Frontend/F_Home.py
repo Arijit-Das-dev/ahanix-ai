@@ -562,6 +562,22 @@ def render_about_page():
                             <li>Download & save creations</li>
                         </ul>
                     </div>
+
+                     <!-- Feature 4 -->
+                    <div class="feature-card">
+                        <span class="feature-icon">✨</span>
+                        <h3 class="feature-title">Jarvis PromptLab</h3>
+                        <p class="feature-description">
+                            Create, evaluate, and optimize AI prompts with precision. Turn vague ideas into powerful, structured prompts instantly.
+                        </p>
+                        <ul class="feature-list">
+                            <li>Generate structured prompts from ideas</li>
+                            <li>Evaluate prompt quality (0–100 scoring)</li>
+                            <li>Get strengths, weaknesses & improvements</li>
+                            <li>Auto-improve prompts instantly</li>
+                            <li>Ready-to-use production prompts</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
             
