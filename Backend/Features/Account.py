@@ -1,7 +1,6 @@
 from pymongo import MongoClient
 import os
 from datetime import datetime
-from dotenv import load_dotenv
 from Frontend.F_Account import render_auth_page
 from Backend.Config.settings import settings
 # ---------- MONGODB SETUP ----------

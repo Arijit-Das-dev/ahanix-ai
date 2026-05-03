@@ -49,23 +49,6 @@ class INGESTION_PIPELINE_MODEL:
 
         return documents
     
-    # ======================
-    # CLEANING THE DOCUMENTS
-    # =======================
-    def clean_docs(documents):
-
-        for files in documents:
-            text = files.page_content
-
-            text = text.replace("\n", " ") 
-            text = " ".join(text.split()) # removes extra space
-
-            files.page_dontent = text.strip()
-
-        print("DOCUMENTs CLEANED SUCCESSFULLY")
-        print("="*50)
-        return documents
-    
     # =================
     # SPLIT INTO CHUNKS
     # =================
@@ -76,6 +59,7 @@ class INGESTION_PIPELINE_MODEL:
         splitter = RecursiveCharacterTextSplitter(
             chunk_size = 800,
             chunk_overlap = 150,
+            separators=["\n\n", "\n", " ", ""]
         )
 
         chunks = splitter.split_documents(documents)
@@ -110,8 +94,6 @@ class INGESTION_PIPELINE_MODEL:
         persist_directory=db_path,
         collection_metadata={"hnsw:space": "cosine"}
         )
-
-        vector_store.persist()
 
         print("CHROMA DB CREATED SUCCESSFULLY")
         return vector_store
