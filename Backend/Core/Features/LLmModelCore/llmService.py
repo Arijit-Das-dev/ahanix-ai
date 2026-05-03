@@ -7,7 +7,7 @@ class LLM_SERVICE_PROVIDER:
     MODEL_MISTRAL_1 = "ministral-8b-latest"
     MODEL_MISTRAL_2 = "mistral-small-latest"
     MODEL_GEMINI = "gemini-2.5-flash-lite"
-    MODEL_COHERE = ""
+    MODEL_COHERE = "command-r-08-2024"
     
 # EMBEDDING MODELS BY HUGGINGFACE
 class EMBEDDING_MODEL_PROVIDER:
