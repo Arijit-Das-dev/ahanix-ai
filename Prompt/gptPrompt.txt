@@ -23,6 +23,18 @@ IMPROVEMENTS:
 (and continue for ALL detected improvements)
 ATS SCORE:
 <number>/100
+KEYWORD MATCH:
+<number>/100
+EXPERIENCE RELEVANCE:
+<number>/100
+SKILLS:
+<number>/100
+PROJECTS:
+<number>/100
+EDUCATION:
+<number>/100
+FORMATTING:
+<number>/100
 Rules:
 - Keep responses concise and professional.
 - No introductions, explanations, summaries, markdown, or extra text.

@@ -1932,3 +1932,74 @@ def Download_Section():
         file_name="resume.pdf",
         mime="application/pdf"
     )
+
+# =========================================================
+# SCORES
+# =========================================================
+
+def show_keyword_score(score):
+
+    st.markdown(f"""
+    <div class="ats-card">
+        <div class="ats-circle">
+            <span>{score}/100</span>
+        </div>
+        <p>KEYWORD SCORE</p>
+    </div>
+    """, unsafe_allow_html=True)
+
+def show_experience_score(score):
+
+    st.markdown(f"""
+    <div class="ats-card">
+        <div class="ats-circle">
+            <span>{score}/100</span>
+        </div>
+        <p>EXPERIENCE SCORE</p>
+    </div>
+    """, unsafe_allow_html=True)
+
+def show_skills_score(score):
+
+    st.markdown(f"""
+    <div class="ats-card">
+        <div class="ats-circle">
+            <span>{score}/100</span>
+        </div>
+        <p>SKILLS SCORE</p>
+    </div>
+    """, unsafe_allow_html=True)
+
+
+def show_projects_score(score):
+
+    st.markdown(f"""
+    <div class="ats-card">
+        <div class="ats-circle">
+            <span>{score}/100</span>
+        </div>
+        <p>PROJECTS SCORE</p>
+    </div>
+    """, unsafe_allow_html=True)
+
+def show_education_score(score):
+
+    st.markdown(f"""
+    <div class="ats-card">
+        <div class="ats-circle">
+            <span>{score}/100</span>
+        </div>
+        <p>EDUCATION SCORE</p>
+    </div>
+    """, unsafe_allow_html=True)
+
+def show_format_score(score):
+
+    st.markdown(f"""
+    <div class="ats-card">
+        <div class="ats-circle">
+            <span>{score}/100</span>
+        </div>
+        <p>FORMAT SCORE</p>
+    </div>
+    """, unsafe_allow_html=True)

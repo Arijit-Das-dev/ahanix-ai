@@ -298,59 +298,149 @@ elif st.session_state.current_page == "analysis":
 
     ui.heading()
     st.divider()
+
+    # ----------------------------
+    # Default Scores
+    # ----------------------------
+    ats_score = 0
+    keyword_score = 0
+    experience_score = 0
+    skills_score = 0
+    projects_score = 0
+    education_score = 0
+    format_score = 0
+
     col1, col2, col3 = st.columns(3, gap="xxsmall")
 
     if "output" not in st.session_state:
         st.session_state.output = None
 
+    # ----------------------------
+    # Upload Resume
+    # ----------------------------
     with col1:
 
         ui.subheader(text="Upload File")
+
         file = st.file_uploader(
             label="Upload your resume here",
             help="Only pdf files are supported.",
             type=["pdf"]
         )
-    
+
+    # ----------------------------
+    # Analyze Resume
+    # ----------------------------
     with col2:
 
         ui.subheader(text="Analyze resume")
+
         pdf_parser = PDF_PARSER()
-        container_1 = st.container(height=300)
         modelGpt = MODEL_GPT()
+
+        container_1 = st.container(height=300)
 
         with container_1:
 
             role = st.text_input("Enter your job role")
 
             if role:
+
                 analyse = st.button("Start analyzing")
-                
+
                 if analyse:
+
                     if file:
+
                         ui.parsing_loader()
-                        content = pdf_parser.extract_from_upload(upload_file=file)
-                        st.success("Pdf parsed successfully")
+
+                        content = pdf_parser.extract_from_upload(
+                            upload_file=file
+                        )
+
+                        st.success("PDF parsed successfully")
                         st.divider()
 
                         st.info("Analysis", icon="ℹ️")
+
                         output = modelGpt.askGpt(
-                            content = content,
+                            content=content,
                             role=role
                         )
+
                         st.session_state.output = output
+
                         st.markdown(output)
+
                     else:
                         st.error("Give your resume first !!!")
-        
+
+    # ----------------------------
+    # ATS Score Extraction
+    # ----------------------------
+    output = st.session_state.get("output")
+
+    if output:
+
+        match1 = re.search(r'ATS SCORE:\s*(\d+)', output)
+        match2 = re.search(r'KEYWORD MATCH:\s*(\d+)', output)
+        match3 = re.search(r'EXPERIENCE RELEVANCE:\s*(\d+)', output)
+        match4 = re.search(r'SKILLS:\s*(\d+)', output)
+        match5 = re.search(r'PROJECTS:\s*(\d+)', output)
+        match6 = re.search(r'EDUCATION:\s*(\d+)', output)
+        match7 = re.search(r'FORMATTING:\s*(\d+)', output)
+
+        ats_score = int(match1.group(1)) if match1 else 0
+        keyword_score = int(match2.group(1)) if match2 else 0
+        experience_score = int(match3.group(1)) if match3 else 0
+        skills_score = int(match4.group(1)) if match4 else 0
+        projects_score = int(match5.group(1)) if match5 else 0
+        education_score = int(match6.group(1)) if match6 else 0
+        format_score = int(match7.group(1)) if match7 else 0
+
+    # ----------------------------
+    # ATS Score Display
+    # ----------------------------
     with col3:
 
         ui.subheader(text="ATS SCORE")
-        container_2 = st.container(height=300)
-        with container_2:
-            output = st.session_state.get("output")
 
-            if output:
-                match = re.search(r'ATS SCORE:\s*(\d+)', output)
-                ats_score = int(match.group(1)) if match else 0
-                ui.show_ats_score(score=ats_score)
+        container_2 = st.container(height=300)
+
+        with container_2:
+            ui.show_ats_score(score=ats_score)
+
+    # ----------------------------
+    # Detailed Scores
+    # ----------------------------
+    st.divider()
+
+    col4, col5 = st.columns(2, gap="medium")
+
+    with col4:
+        ui.subheader(text="KEYWORD SCORE")
+        ui.show_keyword_score(score=keyword_score)
+
+    with col5:
+        ui.subheader(text="EXPERIENCE SCORE")
+        ui.show_experience_score(score=experience_score)
+
+    col6, col7 = st.columns(2, gap="medium")
+
+    with col6:
+        ui.subheader(text="SKILLS SCORE")
+        ui.show_skills_score(score=skills_score)
+
+    with col7:
+        ui.subheader(text="PROJECTS SCORE")
+        ui.show_projects_score(score=projects_score)
+
+    col8, col9 = st.columns(2, gap="medium")
+
+    with col8:
+        ui.subheader(text="EDUCATION SCORE")
+        ui.show_education_score(score=education_score)
+
+    with col9:
+        ui.subheader(text="FORMATTING SCORE")
+        ui.show_format_score(score=format_score)
