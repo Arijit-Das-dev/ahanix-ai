@@ -28,7 +28,7 @@ def insert_into_user(user_id, query_user):
 
     document = mongo.main_db_user_document(
         user_id=user_id,
-        user_query=user_query,
+        user_query=query_user,
         date=datetime.now()
     )
 

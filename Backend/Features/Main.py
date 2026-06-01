@@ -24,7 +24,6 @@ if __name__ == "__main__":
         if wake_word:
             # Insert wake word in DB (if needed)
             insert_wake(wake_word)
-
             
             j.speak("Yes sir, i am listening")
 

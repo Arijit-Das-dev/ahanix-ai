@@ -147,13 +147,18 @@ else:
         with col2:
 
             if st.button("Generate Notes"):
+                if user and subject:
 
-                notes = cohere.askCohere(user_input=user, subject=subject)
-                st.session_state["notes"] = notes
+                    notes = cohere.askCohere(user_input=user, subject=subject)
+                    st.session_state["notes"] = notes
+                else:
+                    st.error("Write something !!!")
 
         if "notes" in st.session_state:
+            container = st.container(height=500)
 
-            st.markdown(st.session_state["notes"])
+            with container:
+                st.markdown(st.session_state["notes"])
             
             pdf_bytes = gen_pdf.GeneratePdf(notes_text=st.session_state["notes"], subject=subject)
 

@@ -67,7 +67,7 @@ else:
     # Main area for editor
     code, submit = ui.code_editor()
 
-    if submit:
+    if code and submit:
         # save user code to DB
         save_user_code(user_id=userId, user_code=code)
 
