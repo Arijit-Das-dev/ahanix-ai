@@ -10,6 +10,8 @@ import os
 """ SETTING UP GEMINI MODEL """ # TEMPLETE
 class MODEL_GEMINI:
 
+    MAX_TURNS = 5
+
     def __init__(self):
         
         # Model Configuration
@@ -25,6 +27,12 @@ class MODEL_GEMINI:
         with open(prompt_path, "r", encoding="utf-8") as f:
             self.system_prompt = f.read()
 
+    def _trim_memory(self):
+
+        max_messages = self.MAX_TURNS * 2 # 10
+        if len(self.memory) > max_messages: # check if messages hit the length of 10 
+            self.memory = self.memory[-(max_messages):] # keep 10 last conversation
+
     def askGemini(self, query):
 
         userMessage = types.Content(
@@ -33,19 +41,41 @@ class MODEL_GEMINI:
         )
         self.memory.append(userMessage)
 
+        # trim old history
+        self._trim_memory()
+
+        conversaton = [
+
+            # System Prompt
+            types.Content(
+                role="user",
+                parts=[
+                    types.Part.from_text(
+                        text=self.system_prompt
+                    )
+                ]
+            )
+        ] + self.memory
+
         try:
             response = self.client.models.generate_content(
                 model=self.Model,
-                contents=f"{self.memory} + {self.system_prompt}"
+                contents=conversaton
             )
             result = response.text
 
-            modelMessage = types.Content(
+            # Save Assistant Response
+            assistant_message = types.Content(
                 role="model",
-                parts=[types.Part.from_text(text=result)]
+                parts=[
+                    types.Part.from_text(text=result)
+                ]
             )
 
-            self.memory.append(modelMessage)
+            self.memory.append(assistant_message)
+
+            # Trim again after assistant response
+            self._trim_memory()
 
             return result
 
