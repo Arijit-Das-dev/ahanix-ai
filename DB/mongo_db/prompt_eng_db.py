@@ -6,7 +6,7 @@ Using MongoDB for storing user codes and user queries
 from pymongo import MongoClient
 from datetime import datetime
 from Backend.Config.settings import settings 
-from Backend.Utils.mongo_doc_builder import MongoDocumentBuilder
+from Backend.Utils.mongo_db.mongo_doc_builder import MongoDocumentBuilder
 
 mongo = MongoDocumentBuilder()
 

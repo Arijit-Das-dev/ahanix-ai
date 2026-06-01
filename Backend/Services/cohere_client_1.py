@@ -7,7 +7,7 @@ from Backend.Core.Features.LLmModelCore.llm_Service import llm_service_provider 
 class MODEL_COHERE:
 
     def __init__(self):
-        
+
         self.MODEL = llm_service_provider.MODEL_COHERE # BACKEND/CORE/FEATURES/LLMMODELCORE/LLMSERVICE
         self.CLIENT = cohere.ClientV2(api_key=settings.COHERE_API_KEY) # BACKEND/CONFIG/SETTINGS
         self.MEMORY = []
@@ -20,10 +20,10 @@ class MODEL_COHERE:
 
     def askCohere(self, user_input, context):
         
-         # Memory control (last 2 turns)
+        # Memory control (last 2 turns)
         MAX_TURNS = 2
         self.MEMORY = self.MEMORY[-(MAX_TURNS * 2):]
-        
+
         messages = [
             {
                 "role":"system",
@@ -48,7 +48,7 @@ class MODEL_COHERE:
 
         reply = response.message.content[0].text
 
-        # updated memory
+        # updated memory for user 
         self.MEMORY.append(
             {
                 "role":"user",
@@ -56,6 +56,7 @@ class MODEL_COHERE:
             },
         )
 
+        # updated memory for assistant 
         self.MEMORY.append(
             {
                 "role":"assistant",
