@@ -2,9 +2,6 @@ import streamlit as st
 from Frontend.F_MergePages import style1
 
 style1()
-# -------------------------------
-# NAVIGATION
-# -------------------------------
 
 # -------------------------------
 # FEATURE GROUP 1
@@ -50,13 +47,9 @@ pages = {
 
     "Developer's choice":features_for_devs,
 
-    "Settings":[
-        st.Page(
-            "settings/settings_materials.py",
-            title="Settings",
-            icon=":material/settings:"
-        )
-    ]
+    "Settings":[st.Page("settings/settings_materials.py",title="Settings",icon=":material/settings:")],
+
+    "Profile":[st.Page("profile/profile_materials.py", title="Profile", icon=":material/person:")]
 }
 
 # -------------------------------
