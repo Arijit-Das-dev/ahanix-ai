@@ -29,7 +29,7 @@ pages = {
     "Account": [
         st.Page(
             "account.py",
-            title="account",
+            title="Account",
             icon=":material/account_circle:"
         )
     ],
