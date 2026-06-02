@@ -23,4 +23,8 @@ class Settings:
     MY_SQL_JARVIS_WAKE = os.getenv("MYSQL_JARVIS_WAKE")
     MYSQL_JARVIS_WEATHER = os.getenv("MYSQL_JARVIS_WEATHER")
 
+    # SUPABASE
+    SUPABASE_URL = os.getenv("SUPABASE_URL")
+    SUPABASE_KEY = os.getenv("SUPABASE_API")
+    
 settings = Settings()
