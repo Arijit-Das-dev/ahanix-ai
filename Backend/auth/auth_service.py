@@ -1,7 +1,7 @@
 import streamlit as st
 from supabase import Client, create_client
 from Backend.Config.settings import settings
-
+import Frontend.F_Account as ui
 
 class Authentication:
 
@@ -19,6 +19,8 @@ class Authentication:
     # -------------------------
     def sign_up(self, email: str, password: str):
 
+        ui.inject_css()
+
         if not email or not password:
             st.warning("Please fill all fields.")
             return None
@@ -30,7 +32,6 @@ class Authentication:
                     "password": password
                 }
             )
-
             return user
 
         except Exception as e:
@@ -42,6 +43,8 @@ class Authentication:
     # -------------------------
     def sign_in(self, email: str, password: str):
 
+        ui.inject_css()
+        
         if not email or not password:
             st.warning("Please fill all fields.")
             return None
@@ -65,6 +68,8 @@ class Authentication:
     # -------------------------
     def sign_out(self):
 
+        ui.inject_css()
+
         try:
             self.supabase.auth.sign_out()
 
@@ -82,81 +87,93 @@ class Authentication:
     # -------------------------
     def main_app(self, user_email):
 
-        st.title("Welcome Page")
+        ui.inject_css()
 
-        st.success(f"Welcome, {user_email}")
+        container = st.container(height=650)
 
-        st.divider()
+        with container:
 
-        if st.button("Logout", use_container_width=True):
-            self.sign_out()
+            st.title("Welcome Page")
+
+            st.success(f"Welcome, {user_email}")
+
+            st.divider()
+
+            if st.button("Logout", use_container_width=True):
+                self.sign_out()
 
     # -------------------------
     # AUTH SCREEN
     # -------------------------
     def auth_screen(self):
 
-        st.title("🔐 JARVIS Authentication")
+        ui.inject_css()
 
-        # Initialize auth mode
-        if "auth_mode" not in st.session_state:
-            st.session_state.auth_mode = "signin"
+        container = st.container(height=650)
 
-        col1, col2 = st.columns(2)
+        with container:
 
-        with col1:
-            if st.button("Sign In", use_container_width=True):
+            ui.header()
+
+            # Initialize auth mode
+            if "auth_mode" not in st.session_state:
                 st.session_state.auth_mode = "signin"
 
-        with col2:
-            if st.button("Sign Up", use_container_width=True):
-                st.session_state.auth_mode = "signup"
+            col1, col2 = st.columns(2)
 
-        st.divider()
+            with col1:
+                if st.button("Sign In", use_container_width=True):
+                    st.session_state.auth_mode = "signin"
 
-        email = st.text_input("Email Address")
+            with col2:
+                if st.button("Sign Up", use_container_width=True):
+                    st.session_state.auth_mode = "signup"
 
-        password = st.text_input(
-            "Password",
-            type="password"
-        )
+            st.divider()
 
-        # ---------------------
-        # SIGN UP UI
-        # ---------------------
-        if st.session_state.auth_mode == "signup":
+            email = st.text_input("Email Address")
 
-            if st.button("Create Account", use_container_width=True):
+            password = st.text_input(
+                "Password",
+                type="password"
+            )
 
-                user = self.sign_up(
-                    email=email,
-                    password=password
-                )
+            # ---------------------
+            # SIGN UP UI
+            # ---------------------
+            if st.session_state.auth_mode == "signup":
 
-                if user:
-                    st.success(
-                        "Registration successful. Check your email for verification."
+                if st.button("Create Account", use_container_width=True):
+
+                    user = self.sign_up(
+                        email=email,
+                        password=password
                     )
 
-        # ---------------------
-        # SIGN IN UI
-        # ---------------------
-        else:
+                    if user:
+                        st.success(
+                            "Registration successful. Check your email for verification."
+                        )
 
-            if st.button("Login", use_container_width=True):
+            # ---------------------
+            # SIGN IN UI
+            # ---------------------
+            else:
 
-                user = self.sign_in(
-                    email=email,
-                    password=password
-                )
+                if st.button("Login", use_container_width=True):
 
-                if user and user.user:
-
-                    st.session_state.user_email = user.user.email
-                    st.session_state.logged_in = True
-
-                    st.success(
-                        f"Welcome back, {user.user.email}"
+                    user = self.sign_in(
+                        email=email,
+                        password=password
                     )
 
-                    st.rerun()
+                    if user and user.user:
+
+                        st.session_state.user_email = user.user.email
+                        st.session_state.logged_in = True
+
+                        st.success(
+                            f"Welcome back, {user.user.email}"
+                        )
+
+                        st.rerun()
