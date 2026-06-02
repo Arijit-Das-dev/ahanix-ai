@@ -49,7 +49,7 @@ pages = {
 
     "Settings":[st.Page("settings/settings_materials.py",title="Settings",icon=":material/settings:")],
 
-    "Profile":[st.Page("profile/profile_materials.py", title="Profile", icon=":material/person:")]
+    "Profile":[st.Page("User/profile_materials.py", title="Profile", icon=":material/person:")]
 }
 
 # -------------------------------
