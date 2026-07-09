@@ -499,8 +499,7 @@ def ai_chat_input():
             st.markdown(f"""
             <div class="assistant-bubble">
                 <div class="message-label assistant-label">🤖 Jarvis <span style="float:right">{msg["time"]}</span></div>
-                {msg["content"]}
-            </div>
+                {msg["content"]}</div>
             <div class="clearfix"></div>
             """, unsafe_allow_html=True)
     

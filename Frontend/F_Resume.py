@@ -1,11 +1,16 @@
 import streamlit as st
 import streamlit.components.v1 as components
 import time as t
+
 # =========================
 # CSS INJECTION
 # =========================
 def inject_css():
-
+    
+    st.set_page_config(
+        layout="wide"
+    )
+    
     st.markdown("""
     <style>
 

@@ -39,23 +39,30 @@ else:
 
             with st.spinner("Generating image, Please wait..."):
                 try:
-                    url = f"https://image.pollinations.ai/prompt/{requests.utils.quote(prompt)}"
-                    response = requests.get(url)
-                    img = Image.open(BytesIO(response.content))
+                    url = f"https://image.pollinations.ai/prompt/{requests.utils.quote(prompt)}?width=1024&height=1024&nologo=true&model=flux"
+                    response = requests.get(url, timeout=30)
                     
-                    # Display image
-                    st.image(img, caption=f"Generated: {prompt}", use_container_width=True)
-                    
-                    # Download button
-                    buf = BytesIO()
-                    img.save(buf, format="PNG")
-                    st.download_button(
-                        label="Download Image",
-                        data=buf.getvalue(),
-                        file_name="generated_image.png",
-                        mime="image/png"
-                    )
+                    # Validate response
+                    if response.status_code != 200:
+                        st.error(f"API error: HTTP {response.status_code}")
+                    elif "image" not in response.headers.get("Content-Type", ""):
+                        st.error(f"Unexpected response type: {response.headers.get('Content-Type')}")
+                        st.code(response.text[:300])  # Show what came back (for debugging)
+                    else:
+                        img = Image.open(BytesIO(response.content))
+                        
+                        st.image(img, caption=f"Generated: {prompt}", use_container_width=True)
+                        
+                        buf = BytesIO()
+                        img.save(buf, format="PNG")
+                        buf.seek(0)  # ← also add this; missing seek can cause empty downloads
+                        st.download_button(
+                            label="Download Image",
+                            data=buf.getvalue(),
+                            file_name="generated_image.png",
+                            mime="image/png"
+                        )
+                except requests.exceptions.Timeout:
+                    st.error("Request timed out. Pollinations may be slow — try again.")
                 except Exception as e:
-                    st.error(f"Error generating image: {e}")
-        else:
-            st.warning("Please enter the prompt first !")        
+                    st.error(f"Error generating image: {e}")       
